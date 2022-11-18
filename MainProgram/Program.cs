@@ -1,30 +1,27 @@
 ﻿using System.IO;
 
-int lineNumber;
 
-while (true)
+do
 {
     string[] lines = File.ReadAllLines("file.txt");
-    for (int i = 0; i < lines.Length; i++)
-    {
-        Console.WriteLine($"{i + 1} {lines[i]} ");
-    }
-    do
-    {
-        Console.WriteLine("What line would you like to edit?");
-    } while (!(int.TryParse(Console.ReadLine(), out lineNumber) && numberIsValid(lineNumber, 1, lines.Length)));
-    Console.WriteLine($"You asked to edit line {lineNumber}.");
 
-    var newLine = Console.ReadLine();
-    lines[lineNumber - 1] = newLine;
-    File.WriteAllLines("file.txt", lines);
+    printLines(lines);
 
-    Console.WriteLine("Do you want to keep editing this file?");
-    var input = Console.ReadLine();
-    if(input == "exit")
-    {
-        break;
-    }
+    int lineNumber = getNewLineFromUser(lines, out string newLine);
+
+    updateFileWithNewLine(lines, lineNumber, newLine);
+
+}while(userWantsToKeepEditing());
+
+bool userWantsToKeepEditing()
+{
+    return getString("Do you want to keep editing this file?") != "exit";
+}
+
+string getString(string prompt)
+{
+    Console.WriteLine(prompt);
+    return Console.ReadLine();
 }
 
 bool numberIsValid(int number, int min, int max)
@@ -37,4 +34,29 @@ bool numberIsValid(int number, int min, int max)
     else
     { isValid = false; }
     return isValid;
+}
+
+static void printLines(string[] lines)
+{
+    for (int i = 0; i < lines.Length; i++)
+    {
+        Console.WriteLine($"{i + 1} {lines[i]} ");
+    }
+}
+
+int getNewLineFromUser(string[] lines, out string newLine)
+{
+    int lineNumber;
+    do
+    {
+        Console.WriteLine("What line would you like to edit?");
+    } while (!(int.TryParse(Console.ReadLine(), out lineNumber) && numberIsValid(lineNumber, 1, lines.Length)));
+    newLine = getString($"You asked to edit line {lineNumber}.");
+    return lineNumber;
+}
+
+static void updateFileWithNewLine(string[] lines, int lineNumber, string newLine)
+{
+    lines[lineNumber - 1] = newLine;
+    File.WriteAllLines("file.txt", lines);
 }
