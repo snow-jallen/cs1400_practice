@@ -1,4 +1,5 @@
 Random
-lines
-of 
+This is supposed to be in line two.
+Hello smiley face. :-)
 text
+Now there are 5 lines.
