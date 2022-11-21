@@ -1,5 +1,40 @@
 ﻿using System.IO;
+using System.Linq;
 
+//get a point every time user hits space...
+//BUT, not more than one every half a second.
+
+var tuple = (1, true, "Name");
+
+
+var benjamin = new Person("Benjamin", 25, 250, 25000, null);
+benjamin = benjamin with {HealthPoints = 50};
+//benjamin.HealthPoints -= 50; (this won't work)
+
+Console.Clear();
+int points = 0;
+DateTime lastScoreChange = DateTime.MinValue;
+while (true)
+{
+    Console.CursorLeft = 0;
+    Console.CursorTop = 0;
+    Console.Write(points);
+    var key = Console.ReadKey();
+    var elapsedTime = DateTime.Now - lastScoreChange;
+    var longEnough = elapsedTime > TimeSpan.FromMilliseconds(333);
+
+    if (key.Key == ConsoleKey.Spacebar)
+    {
+        if (longEnough)
+        {
+            lastScoreChange = DateTime.Now;
+            points += 1;
+        }
+        else
+        { Console.Write("Uh uh uh..."); }
+    }
+}
+return;
 
 do
 {
@@ -11,7 +46,7 @@ do
 
     updateFileWithNewLine(lines, lineNumber, newLine);
 
-}while(userWantsToKeepEditing());
+} while (userWantsToKeepEditing());
 
 bool userWantsToKeepEditing()
 {
@@ -60,3 +95,11 @@ static void updateFileWithNewLine(string[] lines, int lineNumber, string newLine
     lines[lineNumber - 1] = newLine;
     File.WriteAllLines("file.txt", lines);
 }
+
+void doScore(Person p)
+{
+    
+}
+
+record Weapon(string Name, int HitPoints, string Provenance);
+record Person(string Name, int Age, int Score, int HealthPoints, Weapon[] weapons);
