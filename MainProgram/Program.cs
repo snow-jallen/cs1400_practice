@@ -1,6 +1,53 @@
 ﻿using System.IO;
 using System.Linq;
 
+
+//const
+const decimal MAX_SCORE = 5_000_000_000.0234567M;
+
+//One-dimensional array (e.g. a regular, normal array)
+string[] nameArray = new string[5];
+nameArray[0] = "Jack";
+
+//2-D array
+string[,] twoDarray = new string[50, 20_000];
+twoDarray[0, 0] = "Jonathan";
+twoDarray[0, 1] = "Allen";
+
+//jagged array
+string[][] jaggedArray = new string[5][];
+jaggedArray[0] = new string[2];
+jaggedArray[0][0] = "Jonathan";
+jaggedArray[0][1] = "Allen";
+
+jaggedArray[1] = new string[3];
+jaggedArray[1][0] = "item 1";
+jaggedArray[1][1] = "item 2";
+jaggedArray[1][2] = "item 3";
+
+//string formatting
+string interpolatedString = $"The max score is {MAX_SCORE,-25:n0}!";
+Console.WriteLine(interpolatedString);
+Console.WriteLine("The max score is {2,5}|{1,25}|{0:n0}|", MAX_SCORE, MAX_SCORE / 2, MAX_SCORE * 2);
+
+Console.WriteLine("{0}, {1} {2:00000}", "New Haven", "CT", 1234);
+Console.WriteLine("{0}, {1} {2:00000}", "Ephraim", "UT", 84627);
+
+//parallel arrays / lists
+var userInfo = new List<(string name, int score, string favoriteColor)>();
+var names = new List<string>();
+var scores = new List<int>();
+var favoriteColors = new List<string>();
+
+while (names.Count < 5)
+{
+    getUser(names, scores, favoriteColors);
+}
+
+printUserInfo(names, scores, favoriteColors);
+
+
+
 //get a point every time user hits space...
 //BUT, not more than one every half a second.
 
@@ -100,6 +147,24 @@ void doScore(Person p)
 {
     
 }
+
+static void printUserInfo(List<string> names, List<int> scores, List<string> favoriteColors)
+{
+    for (int i = 0; i < names.Count; i++)
+    {
+        Console.WriteLine($"{names[i],-12} | {scores[i]:n3} | {favoriteColors[i]}");
+    }
+}
+
+void getUser(List<string> names, List<int> scores, List<string> favoriteColors)
+{
+    Console.WriteLine(MyStrings.Greeting);
+    names.Add(Console.ReadLine());
+    scores.Add(scores.Count + 5);
+    Console.WriteLine("COlor?");
+    favoriteColors.Add(Console.ReadLine());
+}
+
 
 record Weapon(string Name, int HitPoints, string Provenance);
 record Person(string Name, int Age, int Score, int HealthPoints, Weapon[] weapons);
